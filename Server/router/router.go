@@ -53,6 +53,18 @@ var routes = Routes{
 		"/api/summary",
 		handlers.SummaryGet,
 	},
+	{
+		"route",
+		"GET",
+		"/api/crime",
+		handlers.CrimeGet,
+	},
+	{
+		"route",
+		"POST",
+		"/api/crime",
+		handlers.CrimeAdd,
+	},
 
 }
 

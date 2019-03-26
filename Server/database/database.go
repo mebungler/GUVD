@@ -17,6 +17,7 @@ func ConnectAndCreate(databaseType, connectionString string) {
 	DB.AutoMigrate(&models.Building{})
 	DB.AutoMigrate(&models.Property{})
 	DB.AutoMigrate(&models.Person{})
+	DB.AutoMigrate(&models.Crime{})
 	DB.LogMode(true)
 }
 

@@ -89,3 +89,29 @@ func SummaryGet(w http.ResponseWriter, r *http.Request) {
 	}
 	return
 }
+
+
+func CrimeGet(w http.ResponseWriter, r *http.Request) {
+	var crimes []models.Crime
+	database.GetAll(&crimes)
+	w.WriteHeader(http.StatusOK)
+	if err := json.NewEncoder(w).Encode(crimes); err != nil {
+		panic(err)
+	}
+	return
+}
+
+func CrimeAdd(w http.ResponseWriter, r *http.Request) {
+	var crime models.Crime
+	err := decoder.Get(r.Body, &crime)
+	database.Add(&crime)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		if erro := json.NewEncoder(w).Encode("Server error"); erro != nil {
+			panic(erro)
+		}
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+	return
+}

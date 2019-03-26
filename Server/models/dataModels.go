@@ -26,3 +26,15 @@ type Person struct {
 	ShortDescription string
 	Description      string
 }
+
+type Crime struct {
+	ID           string
+	Name         string
+	Description  string
+	Number       string
+	Result       string
+	Date         string
+	Address      string
+	BuildingName string
+	BuildingID   string
+}
