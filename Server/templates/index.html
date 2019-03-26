@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>GUVD UZB</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+
+    <link href="../public/js/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../public/css/site.css" rel="stylesheet">
+</head>
+<body>
+<div id="app"></div>
+<script src="../public/js/bundle.js" type="text/javascript"></script>
+<script type="text/javascript" src="../public/js/vendor/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../public/js/vendor/popper.js/popper.min.js"></script>
+<script type="text/javascript" src="../public/js/vendor/bootstrap/js/bootstrap.min.js"></script>
+
+<script>
+    $(function () {
+
+        $('#exampleModal').on('show.bs.modal', function (event) {
+            var item = $(event.relatedTarget) // Button that triggered the modal
+            var title = item.find('.card-title') // Extract info from data-* attributes
+            var text = item.find('.card-text') // Extract info from data-* attributes
+            var age = item.find('span') // Extract info from data-* attributes
+            var img = item.find('img') // Extract info from data-* attributes
+            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+            var modal = $(this)
+            modal.find('.modal-title').text(title.text())
+            modal.find('#personData').html('<div class="text-center">' +
+                    '<img src="' + img.attr('src') + ' " class="img-fluid d-inline-block" style="width: 150px"/>' +
+                    '<p>' + text.text() + '<br> (<span class="text-muted small">' + age.text() + '</span>)</p>' +
+                    '</div>')
+        })
+
+
+        $('#exampleModal2').on('show.bs.modal', function (event) {
+            var item = $(event.relatedTarget) // Button that triggered the modal
+            var table = item.data('table') // Button that triggered the modal
+            var title = item.find('.card-title') // Extract info from data-* attributes
+            var address = item.find('.card-text') // Extract info from data-* attributes
+            var type = item.find('span') // Extract info from data-* attributes
+            var img = item.find('img') // Extract info from data-* attributes
+            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+            var modal = $(this)
+            modal.find('.modal-title').text(title.text())
+            modal.find('#building_address').text(address.text())
+            modal.find('#building_type').text(type.text())
+            modal.find('#building_image').attr('src', img.attr('src'))
+            modal.find('#building_table').hide()
+            modal.find('#commerce_table').hide()
+            modal.find(table).show()
+
+        })
+
+        $('#exampleModal3').on('show.bs.modal', function (event) {
+            var item = $(event.relatedTarget) // Button that triggered the modal
+
+            var status = item.data('status') // Button that triggered the modal
+            var title = item.find('.col-11') // Extract info from data-* attributes
+
+            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+            var modal = $(this)
+            // modal.find('.modal-title').text(title.text())
+            modal.find('#event_title').html(title.html())
+            // modal.find('#building_type').text(type.text())
+            // modal.find('#building_image').attr('src', img.attr('src'))
+            modal.find('#check').hide()
+            modal.find('#todo').hide()
+            modal.find(status).show()
+        })
+
+        $('#exampleModal5').on('show.bs.modal', function (event) {
+            var item = $(event.relatedTarget) // Button that triggered the modal
+
+            var title = item.data('title') // Extract info from data-* attributes
+
+            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+            var modal = $(this)
+            // modal.find('.modal-title').text(title.text())
+            modal.find('#map_building').text(title)
+            modal.find('input').val('')
+            modal.find('textarea').val('')
+        })
+
+        $('#exampleModal4').on('show.bs.modal', function (event) {
+            var item = $(event.relatedTarget) // Button that triggered the modal
+
+            var status = item.data('status') // Button that triggered the modal
+            var title = item.find('.col-11') // Extract info from data-* attributes
+
+            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+            var modal = $(this)
+            // modal.find('.modal-title').text(title.text())
+            modal.find('#job_title').html(title.html())
+            // modal.find('#building_type').text(type.text())
+            // modal.find('#building_image').attr('src', img.attr('src'))
+            modal.find('#done').hide()
+            modal.find('#dont').hide()
+            modal.find(status).show()
+        })
+    });
+</script>
+
+<script src="https://api-maps.yandex.ru/2.1/?apikey=b9ce5d4c-250e-4b9d-8b23-a55bb49bd314&lang=ru_RU"
+        type="text/javascript"></script>
+<script type="text/javascript">
+    // Функция ymaps.ready() будет вызвана, когда
+    // загрузятся все компоненты API, а также когда будет готово DOM-дерево.
+    ymaps.ready(init);
+
+    function init() {
+        // Создание карты.
+
+        //
+        //
+        //
+
+
+        var myLatLng = [41.322094, 69.210192];
+        var zoom = 14;
+
+        var myMap = new ymaps.Map("map", {
+            // Координаты центра карты.
+            // Порядок по умолчанию: «широта, долгота».
+            // Чтобы не определять координаты центра карты вручную,
+            // воспользуйтесь инструментом Определение координат.
+            center: myLatLng,
+            // Уровень масштабирования. Допустимые значения:
+            // от 0 (весь мир) до 19.
+            zoom: zoom,
+
+            controls: []
+        });
+
+
+        myMap.controls.add('fullscreenControl');
+
+        var placemark1 = new ymaps.Placemark([41.326441, 69.209039], {
+            balloonContent: 'Дом 37 <br/>ул. Мустакиллик<br/>Жилой дом<br/>' +
+            '<button class="btn btn-success m-2" data-toggle="modal" data-title="Дом 37" data-target="#exampleModal5">Добавить происшествие</button>' +
+            '\n' +
+            '                <table  class="table table-striped">\n' +
+            '                    <tr>\n' +
+            '                        <td>\n' +
+            '                            Всего проживает\n' +
+            '                        </td>\n' +
+            '                        <td>\n' +
+            '                            <strong>300 чел</strong>\n' +
+            '                        </td>\n' +
+            '                    </tr>\n' +
+            '                    <tr>\n' +
+            '                        <td>\n' +
+            '                            Взрослых\n' +
+            '                        </td>\n' +
+            '                        <td>\n' +
+            '                            <strong>180 чел</strong>\n' +
+            '                        </td>\n' +
+            '                    </tr>\n' +
+            '                    <tr>\n' +
+            '                        <td>\n' +
+            '                            Несовершеннолетних\n' +
+            '                        </td>\n' +
+            '                        <td>\n' +
+            '                            <strong>120 чел</strong>\n' +
+            '                        </td>\n' +
+            '                    </tr>\n' +
+            '                    <tr>\n' +
+            '                        <td>\n' +
+            '                            Мужчин\n' +
+            '                        </td>\n' +
+            '                        <td>\n' +
+            '                            <strong>120 чел</strong>\n' +
+            '                        </td>\n' +
+            '                    </tr>\n' +
+            '                    <tr>\n' +
+            '                        <td>\n' +
+            '                            Женщин\n' +
+            '                        </td>\n' +
+            '                        <td>\n' +
+            '                            <strong>180 чел</strong>\n' +
+            '                        </td>\n' +
+            '                    </tr>\n' +
+            '                    <tr>\n' +
+            '                        <td>\n' +
+            '                            Местных\n' +
+            '                        </td>\n' +
+            '                        <td>\n' +
+            '                            <strong>250 чел</strong>\n' +
+            '                        </td>\n' +
+            '                    </tr>\n' +
+            '                    <tr>\n' +
+            '                        <td>\n' +
+            '                            Приезжих\n' +
+            '                        </td>\n' +
+            '                        <td>\n' +
+            '                            <strong>50 чел</strong>\n' +
+            '                        </td>\n' +
+            '                    </tr>\n' +
+            '                    <tr>\n' +
+            '                        <td>\n' +
+            '                            Судимых\n' +
+            '                        </td>\n' +
+            '                        <td>\n' +
+            '                            <strong>10 чел</strong>\n' +
+            '                        </td>\n' +
+            '                    </tr>\n' +
+            '                </table>'
+        }, {
+            preset: 'islands#dotIcon'
+        });
+        var placemark2 = new ymaps.Placemark([41.318251, 69.201938], {
+            balloonContent: 'Дом 17 <br/>ул. Мустакиллик<br/>Жилой дом<br/>' +
+            '<button class="btn btn-success m-2"  data-toggle="modal" data-title="Дом 17" data-target="#exampleModal5">Добавить происшествие</button>' +
+            '\n' +
+            '                <table  class="table table-striped">\n' +
+            '                    <tr>\n' +
+            '                        <td>\n' +
+            '                            Всего проживает\n' +
+            '                        </td>\n' +
+            '                        <td>\n' +
+            '                            <strong>300 чел</strong>\n' +
+            '                        </td>\n' +
+            '                    </tr>\n' +
+            '                    <tr>\n' +
+            '                        <td>\n' +
+            '                            Взрослых\n' +
+            '                        </td>\n' +
+            '                        <td>\n' +
+            '                            <strong>180 чел</strong>\n' +
+            '                        </td>\n' +
+            '                    </tr>\n' +
+            '                    <tr>\n' +
+            '                        <td>\n' +
+            '                            Несовершеннолетних\n' +
+            '                        </td>\n' +
+            '                        <td>\n' +
+            '                            <strong>120 чел</strong>\n' +
+            '                        </td>\n' +
+            '                    </tr>\n' +
+            '                    <tr>\n' +
+            '                        <td>\n' +
+            '                            Мужчин\n' +
+            '                        </td>\n' +
+            '                        <td>\n' +
+            '                            <strong>120 чел</strong>\n' +
+            '                        </td>\n' +
+            '                    </tr>\n' +
+            '                    <tr>\n' +
+            '                        <td>\n' +
+            '                            Женщин\n' +
+            '                        </td>\n' +
+            '                        <td>\n' +
+            '                            <strong>180 чел</strong>\n' +
+            '                        </td>\n' +
+            '                    </tr>\n' +
+            '                    <tr>\n' +
+            '                        <td>\n' +
+            '                            Местных\n' +
+            '                        </td>\n' +
+            '                        <td>\n' +
+            '                            <strong>250 чел</strong>\n' +
+            '                        </td>\n' +
+            '                    </tr>\n' +
+            '                    <tr>\n' +
+            '                        <td>\n' +
+            '                            Приезжих\n' +
+            '                        </td>\n' +
+            '                        <td>\n' +
+            '                            <strong>50 чел</strong>\n' +
+            '                        </td>\n' +
+            '                    </tr>\n' +
+            '                    <tr>\n' +
+            '                        <td>\n' +
+            '                            Судимых\n' +
+            '                        </td>\n' +
+            '                        <td>\n' +
+            '                            <strong>10 чел</strong>\n' +
+            '                        </td>\n' +
+            '                    </tr>\n' +
+            '                </table>'
+        }, {
+            preset: 'islands#dotIcon'
+        });
+        var placemark3 = new ymaps.Placemark([41.325297, 69.221177], {
+            balloonContent: 'Дом 38 <br/>ул. Мустакиллик<br/>Жилой дом<br/>' +
+            '<button class="btn btn-success m-2"  data-toggle="modal" data-title="Дом 38" data-target="#exampleModal5">Добавить происшествие</button>' +
+            '\n' +
+            '                <table  class="table table-striped">\n' +
+            '                    <tr>\n' +
+            '                        <td>\n' +
+            '                            Всего проживает\n' +
+            '                        </td>\n' +
+            '                        <td>\n' +
+            '                            <strong>300 чел</strong>\n' +
+            '                        </td>\n' +
+            '                    </tr>\n' +
+            '                    <tr>\n' +
+            '                        <td>\n' +
+            '                            Взрослых\n' +
+            '                        </td>\n' +
+            '                        <td>\n' +
+            '                            <strong>180 чел</strong>\n' +
+            '                        </td>\n' +
+            '                    </tr>\n' +
+            '                    <tr>\n' +
+            '                        <td>\n' +
+            '                            Несовершеннолетних\n' +
+            '                        </td>\n' +
+            '                        <td>\n' +
+            '                            <strong>120 чел</strong>\n' +
+            '                        </td>\n' +
+            '                    </tr>\n' +
+            '                    <tr>\n' +
+            '                        <td>\n' +
+            '                            Мужчин\n' +
+            '                        </td>\n' +
+            '                        <td>\n' +
+            '                            <strong>120 чел</strong>\n' +
+            '                        </td>\n' +
+            '                    </tr>\n' +
+            '                    <tr>\n' +
+            '                        <td>\n' +
+            '                            Женщин\n' +
+            '                        </td>\n' +
+            '                        <td>\n' +
+            '                            <strong>180 чел</strong>\n' +
+            '                        </td>\n' +
+            '                    </tr>\n' +
+            '                    <tr>\n' +
+            '                        <td>\n' +
+            '                            Местных\n' +
+            '                        </td>\n' +
+            '                        <td>\n' +
+            '                            <strong>250 чел</strong>\n' +
+            '                        </td>\n' +
+            '                    </tr>\n' +
+            '                    <tr>\n' +
+            '                        <td>\n' +
+            '                            Приезжих\n' +
+            '                        </td>\n' +
+            '                        <td>\n' +
+            '                            <strong>50 чел</strong>\n' +
+            '                        </td>\n' +
+            '                    </tr>\n' +
+            '                    <tr>\n' +
+            '                        <td>\n' +
+            '                            Судимых\n' +
+            '                        </td>\n' +
+            '                        <td>\n' +
+            '                            <strong>10 чел</strong>\n' +
+            '                        </td>\n' +
+            '                    </tr>\n' +
+            '                </table>'
+        }, {
+            preset: 'islands#dotIcon'
+        });
+        var placemark4 = new ymaps.Placemark([41.315963, 69.203820], {
+            balloonContent: 'Efendi <br/>ул. Истикбол<br/>Кафе<br/>' +
+            '\n' +
+            '                <table id="commerce_table"  class="table table-striped">\n' +
+            '<button class="btn btn-success m-2"  data-toggle="modal" data-title="Efendi" data-target="#exampleModal5">Добавить происшествие</button>' +
+            '                    <tr>\n' +
+            '                        <td>\n' +
+            '                            Всего рабочих\n' +
+            '                        </td>\n' +
+            '                        <td>\n' +
+            '                            <strong>300 чел</strong>\n' +
+            '                        </td>\n' +
+            '                    </tr>\n' +
+            '                    <tr>\n' +
+            '                        <td>\n' +
+            '                            Мужчин\n' +
+            '                        </td>\n' +
+            '                        <td>\n' +
+            '                            <strong>120 чел</strong>\n' +
+            '                        </td>\n' +
+            '                    </tr>\n' +
+            '                    <tr>\n' +
+            '                        <td>\n' +
+            '                            Женщин\n' +
+            '                        </td>\n' +
+            '                        <td>\n' +
+            '                            <strong>180 чел</strong>\n' +
+            '                        </td>\n' +
+            '                    </tr>\n' +
+            '                    <tr>\n' +
+            '                        <td>\n' +
+            '                            Местных\n' +
+            '                        </td>\n' +
+            '                        <td>\n' +
+            '                            <strong>250 чел</strong>\n' +
+            '                        </td>\n' +
+            '                    </tr>\n' +
+            '                    <tr>\n' +
+            '                        <td>\n' +
+            '                            Приезжих\n' +
+            '                        </td>\n' +
+            '                        <td>\n' +
+            '                            <strong>50 чел</strong>\n' +
+            '                        </td>\n' +
+            '                    </tr>\n' +
+            '                    <tr>\n' +
+            '                        <td>\n' +
+            '                            Судимых\n' +
+            '                        </td>\n' +
+            '                        <td>\n' +
+            '                            <strong>10 чел</strong>\n' +
+            '                        </td>\n' +
+            '                    </tr>\n' +
+            '                </table>'
+        }, {
+            preset: 'islands#dotIcon'
+        });
+        var placemark5 = new ymaps.Placemark([41.318114, 69.218446], {
+            balloonContent: 'Tibon <br/>ул. Истикбол<br/>Кафе<br/>' +
+            '\n' +
+            '                <table id="commerce_table"  class="table table-striped">\n' +
+            '<button class="btn btn-success m-2"  data-toggle="modal" data-title="Tibon" data-target="#exampleModal5">Добавить происшествие</button>' +
+            '                    <tr>\n' +
+            '                        <td>\n' +
+            '                            Всего рабочих\n' +
+            '                        </td>\n' +
+            '                        <td>\n' +
+            '                            <strong>300 чел</strong>\n' +
+            '                        </td>\n' +
+            '                    </tr>\n' +
+            '                    <tr>\n' +
+            '                        <td>\n' +
+            '                            Мужчин\n' +
+            '                        </td>\n' +
+            '                        <td>\n' +
+            '                            <strong>120 чел</strong>\n' +
+            '                        </td>\n' +
+            '                    </tr>\n' +
+            '                    <tr>\n' +
+            '                        <td>\n' +
+            '                            Женщин\n' +
+            '                        </td>\n' +
+            '                        <td>\n' +
+            '                            <strong>180 чел</strong>\n' +
+            '                        </td>\n' +
+            '                    </tr>\n' +
+            '                    <tr>\n' +
+            '                        <td>\n' +
+            '                            Местных\n' +
+            '                        </td>\n' +
+            '                        <td>\n' +
+            '                            <strong>250 чел</strong>\n' +
+            '                        </td>\n' +
+            '                    </tr>\n' +
+            '                    <tr>\n' +
+            '                        <td>\n' +
+            '                            Приезжих\n' +
+            '                        </td>\n' +
+            '                        <td>\n' +
+            '                            <strong>50 чел</strong>\n' +
+            '                        </td>\n' +
+            '                    </tr>\n' +
+            '                    <tr>\n' +
+            '                        <td>\n' +
+            '                            Судимых\n' +
+            '                        </td>\n' +
+            '                        <td>\n' +
+            '                            <strong>10 чел</strong>\n' +
+            '                        </td>\n' +
+            '                    </tr>\n' +
+            '                </table>'
+        }, {
+            preset: 'islands#dotIcon'
+        });
+        var placemark6 = new ymaps.Placemark([41.331290, 69.202788], {
+            balloonContent: 'Korzinka <br/>ул. Истикбол<br/>Магазин<br/>' +
+            '\n' +
+            '                <table id="commerce_table"  class="table table-striped">\n' +
+            '<button class="btn btn-success m-2"  data-toggle="modal" data-title="Korzinka" data-target="#exampleModal5">Добавить происшествие</button>' +
+            '                    <tr>\n' +
+            '                        <td>\n' +
+            '                            Всего рабочих\n' +
+            '                        </td>\n' +
+            '                        <td>\n' +
+            '                            <strong>300 чел</strong>\n' +
+            '                        </td>\n' +
+            '                    </tr>\n' +
+            '                    <tr>\n' +
+            '                        <td>\n' +
+            '                            Мужчин\n' +
+            '                        </td>\n' +
+            '                        <td>\n' +
+            '                            <strong>120 чел</strong>\n' +
+            '                        </td>\n' +
+            '                    </tr>\n' +
+            '                    <tr>\n' +
+            '                        <td>\n' +
+            '                            Женщин\n' +
+            '                        </td>\n' +
+            '                        <td>\n' +
+            '                            <strong>180 чел</strong>\n' +
+            '                        </td>\n' +
+            '                    </tr>\n' +
+            '                    <tr>\n' +
+            '                        <td>\n' +
+            '                            Местных\n' +
+            '                        </td>\n' +
+            '                        <td>\n' +
+            '                            <strong>250 чел</strong>\n' +
+            '                        </td>\n' +
+            '                    </tr>\n' +
+            '                    <tr>\n' +
+            '                        <td>\n' +
+            '                            Приезжих\n' +
+            '                        </td>\n' +
+            '                        <td>\n' +
+            '                            <strong>50 чел</strong>\n' +
+            '                        </td>\n' +
+            '                    </tr>\n' +
+            '                    <tr>\n' +
+            '                        <td>\n' +
+            '                            Судимых\n' +
+            '                        </td>\n' +
+            '                        <td>\n' +
+            '                            <strong>10 чел</strong>\n' +
+            '                        </td>\n' +
+            '                    </tr>\n' +
+            '                </table>'
+        }, {
+            preset: 'islands#dotIcon'
+        });
+        var placemark7 = new ymaps.Placemark([41.314361, 69.223423], {
+            balloonContent: 'Makro <br/>ул. Истикбол<br/>Магазин<br/>' +
+            '\n' +
+            '                <table id="commerce_table"  class="table table-striped">\n' +
+            '<button class="btn btn-success m-2"  data-toggle="modal" data-title="Makro" data-target="#exampleModal5">Добавить происшествие</button>' +
+            '                    <tr>\n' +
+            '                        <td>\n' +
+            '                            Всего рабочих\n' +
+            '                        </td>\n' +
+            '                        <td>\n' +
+            '                            <strong>300 чел</strong>\n' +
+            '                        </td>\n' +
+            '                    </tr>\n' +
+            '                    <tr>\n' +
+            '                        <td>\n' +
+            '                            Мужчин\n' +
+            '                        </td>\n' +
+            '                        <td>\n' +
+            '                            <strong>120 чел</strong>\n' +
+            '                        </td>\n' +
+            '                    </tr>\n' +
+            '                    <tr>\n' +
+            '                        <td>\n' +
+            '                            Женщин\n' +
+            '                        </td>\n' +
+            '                        <td>\n' +
+            '                            <strong>180 чел</strong>\n' +
+            '                        </td>\n' +
+            '                    </tr>\n' +
+            '                    <tr>\n' +
+            '                        <td>\n' +
+            '                            Местных\n' +
+            '                        </td>\n' +
+            '                        <td>\n' +
+            '                            <strong>250 чел</strong>\n' +
+            '                        </td>\n' +
+            '                    </tr>\n' +
+            '                    <tr>\n' +
+            '                        <td>\n' +
+            '                            Приезжих\n' +
+            '                        </td>\n' +
+            '                        <td>\n' +
+            '                            <strong>50 чел</strong>\n' +
+            '                        </td>\n' +
+            '                    </tr>\n' +
+            '                    <tr>\n' +
+            '                        <td>\n' +
+            '                            Судимых\n' +
+            '                        </td>\n' +
+            '                        <td>\n' +
+            '                            <strong>10 чел</strong>\n' +
+            '                        </td>\n' +
+            '                    </tr>\n' +
+            '                </table>'
+        }, {
+            preset: 'islands#dotIcon'
+        });
+
+        //
+        //
+        //
+        //
+
+        // Создаем многоугольник, используя вспомогательный класс Polygon.
+        var myPolygon = new ymaps.Polygon([
+            // Указываем координаты вершин многоугольника.
+            // Координаты вершин внешнего контура.
+            [
+                [41.338975, 69.206972],
+                [41.325205, 69.193017],
+                [41.292286, 69.194806],
+                [41.322460, 69.236290],
+            ]
+        ], {
+            // Описываем свойства геообъекта.
+            // Содержимое балуна.
+            // hintContent: "Шайхонтохур тумани Чақар махалласи"
+        }, {
+            // Задаем опции геообъекта.
+            // Цвет заливки.
+            fillColor: '#2ecc7188',
+            // Ширина обводки.
+            strokeWidth: 1
+        });
+
+        // Добавляем многоугольник на карту.
+        myMap.geoObjects.add(myPolygon)
+                .add(placemark1)
+                .add(placemark2)
+                .add(placemark3)
+                .add(placemark4)
+                .add(placemark5)
+                .add(placemark6)
+                .add(placemark7);
+    }
+</script>
+</body>
+</html>
